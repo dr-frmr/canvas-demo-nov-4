@@ -1,0 +1,23 @@
+interface canvas-demo {
+    variant request {
+        add-user(string),
+        remove-user(string),
+        draw(tuple<string, point>),
+    }
+
+    variant response {
+        invite-accepted,
+        invite-rejected,
+    }
+
+    record point {
+        x: s64,
+        y: s64,
+        color: string,
+    }
+}
+
+world canvas-demo-template-dot-os-v0 {
+    import canvas-demo;
+    include process-v0;
+}

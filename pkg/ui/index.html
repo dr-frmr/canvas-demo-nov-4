@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/kinode.css">
+    <script src="/our.js"></script>
+    <script>
+        document.title = "canvas demo - " + window.our.node;
+    </script>
+    <style>
+        main {
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 960px;
+            min-width: 300px;
+        }
+
+        button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <span id="title">
+        <h1>canvas demo</h1>
+    </span>
+    <main>
+        <article id="select-canvas">
+            <select name="canvas-id" id="canvas-select"></select>
+        </article>
+
+        <article id="canvas">
+        </article>
+        <article id="users"></article>
+        <article id="canvas-controls">
+            <input type="text" id="add-user">
+            <button id="add-user-button">add user</button>
+            <br />
+            <input type="text" id="remove-user">
+            <button id="remove-user-button">remove user</button>
+        </article>
+
+        <script src="/canvas-demo:canvas-demo:template.os/script.js"></script>
+    </main>
+</body>
+
+</html>
