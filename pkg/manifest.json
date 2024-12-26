@@ -6,11 +6,12 @@
         "request_networking": true,
         "request_capabilities": [
             "homepage:homepage:sys",
-            "http_server:distro:sys",
+            "http-server:distro:sys",
             "vfs:distro:sys"
         ],
         "grant_capabilities": [
-            "http_server:distro:sys",
+            "http-server:distro:sys",
+            "terminal:terminal:sys",
             "vfs:distro:sys"
         ],
         "public": false

@@ -2,7 +2,7 @@ use crate::kinode::process::canvas_demo::{
     Point, Request as CanvasRequest, Response as CanvasResponse,
 };
 use kinode_app_framework::{
-    app, http, kiprintln, send_ws_update, Address, Message, Request, Response,
+    app, http, kiprintln, our, send_ws_update, Address, Message, Request, Response,
 };
 use std::collections::{HashMap, HashSet};
 
@@ -21,20 +21,21 @@ app!(
     handle_remote_request
 );
 
-#[derive(serde::Serialize, serde::Deserialize)]
+#[derive(Debug, serde::Serialize, serde::Deserialize)]
 struct State {
     our: Address,
     canvases: HashMap<String, Canvas>,
 }
 
-#[derive(Default, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Default, serde::Serialize, serde::Deserialize)]
 struct Canvas {
     users: HashSet<String>,
     points: Vec<Point>,
 }
 
 impl kinode_app_framework::State for State {
-    fn new(our: Address) -> Self {
+    fn new() -> Self {
+        let our = our();
         let mut canvases = HashMap::new();
         canvases.insert(our.node().to_string(), Canvas::default());
         Self { our, canvases }
@@ -50,16 +51,12 @@ enum Api {
     GetCanvas(String),
 }
 
-fn handle_api_call(
-    _message: &Message,
-    state: &mut State,
-    call: Api,
-) -> (http::server::HttpResponse, Vec<u8>) {
+fn handle_api_call(state: &mut State, call: Api) -> (http::server::HttpResponse, Vec<u8>) {
     let ok_response = http::server::HttpResponse::new(200 as u16);
 
     match call {
         Api::AddUser(user) => {
-            // *we* want to add user to our canvas
+            // we want to add user to our canvas
             let canvas = state.canvases.get_mut(state.our.node()).unwrap();
             canvas.users.insert(user.clone());
             let Ok(invite_response) = Request::to((&user, state.our.process.clone()))
@@ -76,7 +73,7 @@ fn handle_api_call(
             }
         }
         Api::RemoveUser(user) => {
-            // *we* want to remove user from our canvas
+            // we want to remove user from our canvas
             let users = &state.canvases.get(state.our.node()).unwrap().users;
             for target in users {
                 Request::to((target, state.our.process.clone()))
@@ -93,7 +90,7 @@ fn handle_api_call(
             (ok_response, vec![])
         }
         Api::Draw((canvas_id, point)) => {
-            // *we* want to draw on a canvas
+            // we want to draw on a canvas
             // if it's our canvas, broadcast the draw to all users
             // otherwise, just send to the owner
             if canvas_id == state.our.node() {

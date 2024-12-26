@@ -19,5 +19,5 @@ interface canvas-demo {
 
 world canvas-demo-template-dot-os-v0 {
     import canvas-demo;
-    include process-v0;
+    include process-v1;
 }

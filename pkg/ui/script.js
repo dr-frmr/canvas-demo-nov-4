@@ -66,7 +66,6 @@ document.getElementById('remove-user-button').addEventListener('click', () => {
     }
 });
 
-
 function populate_dropdown() {
     api_call("GetCanvasList").then(data => {
         dropdown.innerHTML = data.map(entry => `<option value="${entry}">${entry}</option>`).join('');
